@@ -3,6 +3,7 @@ _proc/
 
 nbs/ppotb
 nbs/ppo_tensorboard
+nbs/action*
 
 *.bak
 .gitattributes
