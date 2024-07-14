@@ -2,6 +2,7 @@ _docs/
 _proc/
 
 nbs/ppotb
+nbs/ppo_tensorboard
 
 *.bak
 .gitattributes
