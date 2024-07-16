@@ -1,8 +1,10 @@
 website:
   sidebar:
     contents:
-      - 01_BreedingSim.ipynb
+      - index.ipynb
+      - 00_config.ipynb
       - 01_Sim.ipynb
       - 02_Callback.ipynb
       - 02_basicbudget.ipynb
       - 03_Policy.ipynb
+      - 04_lab.ipynb

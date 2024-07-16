@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['SelectionIntensityEnvironment']
 
-# %% ../nbs/04_lab.ipynb 2
+# %% ../nbs/04_lab.ipynb 1
 import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
