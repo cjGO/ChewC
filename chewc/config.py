@@ -80,7 +80,7 @@ def create_simulation(config=None):
         set_seed(seed)
 
     G = Genome(config['n_chr'], config['n_loci'], seed=seed)
-    founder_haplotypes = np.load('./data/g2f_ch10.npy')
+    founder_haplotypes = np.load('../nbs/data/g2f_ch10.npy')
     
     # n_parents determines diversity approximately
     random_parent_indices = np.random.choice(founder_haplotypes.shape[0], config['n_parents'], replace=False)
