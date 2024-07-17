@@ -46,27 +46,6 @@ def get_default_config():
         # Seed
         'seed': None
     }
-
-    def __str__():
-        sections = [
-            ("Environment", ['action_low', 'action_high', 'sparse_reward']),
-            ("Simulation", ['n_parents','n_chr', 'n_loci', 'pop_size', 'max_generations', 'h2', 'target_mean', 'target_variance']),
-            ("Training", ['total_timesteps', 'learning_rate', 'gae_lambda']),
-            ("Callback", ['log_freq']),
-            ("Progressive", ['start_gen', 'end_gen', 'start_gae_lambda', 'end_gae_lambda']),
-            ("Other", ['seed'])
-        ]
-
-        output = "Default Configuration:\n"
-        for section, keys in sections:
-            output += f"\n{section} Parameters:\n"
-            for key in keys:
-                value = config[key]
-                output += f"  {key:<20} = {value}\n"
-
-        return output
-
-    config['__str__'] = __str__
     return config
 
 
