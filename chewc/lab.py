@@ -66,18 +66,15 @@ class SelectionIntensityEnvironment(gym.Env):
         self.episode_reward = 0
         observation = self._get_obs()
         info = self._get_info()
+        
         return observation, info
 
     def step(self, action):
         
         # Map the action from [-1, 1] to [action_low, action_high]
         action = scale_values(action, to_range=(self.action_low, self.action_high))
-#         print(action)
 
-        # Ensure action_scalar is within bounds
         total_selected = max((2,int(action * self.population.size)))
-#         print(f'total selected {total_selected}')
-#         action_scalar = np.clip(action_scalar, self.action_low, self.action_high)
         selected = torch.topk(self.population.phenotypes, total_selected).indices
         self.population = create_pop(self.SP.G, random_crosses(self.population.haplotypes[selected], self.SP.pop_size))
         self.phenotype = phenotype(self.population, self.SP.T, self.SP.h2)
@@ -86,10 +83,8 @@ class SelectionIntensityEnvironment(gym.Env):
         observation = self._get_obs()
         info = self._get_info()
         info['normalized_action'] = action
-
-
         
-        terminated = self.current_generation >= self.SP.max_generations
+        terminated = self.current_generation > self.SP.max_generations
         #REWARD
         if self.config.get('sparse_reward', False):  # Use .get() with a default value
             reward = 0 if not terminated else float(self.population.breeding_values.max())

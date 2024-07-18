@@ -74,5 +74,6 @@ d = { 'settings': { 'branch': 'main',
                            'chewc.sim.random_crosses': ('sim.html#random_crosses', 'chewc/sim.py'),
                            'chewc.sim.recombine': ('sim.html#recombine', 'chewc/sim.py'),
                            'chewc.sim.scale_values': ('sim.html#scale_values', 'chewc/sim.py'),
+                           'chewc.sim.set_seed': ('sim.html#set_seed', 'chewc/sim.py'),
                            'chewc.sim.truncation_selection': ('sim.html#truncation_selection', 'chewc/sim.py'),
                            'chewc.sim.update_pop': ('sim.html#update_pop', 'chewc/sim.py')}}}
