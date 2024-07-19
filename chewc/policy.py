@@ -13,6 +13,7 @@ from typing import Tuple, Callable
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.callbacks import BaseCallback
 
+
 class CustomFeatureExtractor(BaseFeaturesExtractor):
     def __init__(self, observation_space: spaces.Dict):
         super().__init__(observation_space, features_dim=64)

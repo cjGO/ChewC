@@ -22,6 +22,14 @@ def set_seed(seed):
     
 def get_default_config():
     config = {
+        
+        # Observation space configuration
+        'observation_config': {
+            'remaining_proportion': {'type': 'scalar', 'low': 0, 'high': 1},
+        },
+        
+        
+        
         # Environment parameters
         'action_low': 0.05,
         'action_high': 0.95,
@@ -83,8 +91,7 @@ def create_simulation(config=None):
     T = Trait(G, founder_pop, target_mean=config['target_mean'], target_variance=config['target_variance'], seed=seed)
     
     SP = SimParams(founder_pop, config)
-    env_config = {'sparse_reward': config['sparse_reward']}
-    env = SelectionIntensityEnvironment(SP, env_config)
+    env = SelectionIntensityEnvironment(SP, config)
     
     return env
 

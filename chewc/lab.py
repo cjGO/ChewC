@@ -30,10 +30,14 @@ class SelectionIntensityEnvironment(gym.Env):
             dtype=np.float32
         )
         
-        self.observation_space = gym.spaces.Dict({
-            "population": gym.spaces.Box(low=0, high=1, shape=(self.SP.pop_size, 2, self.SP.G.n_chr, self.SP.G.n_loci), dtype=np.int32),
-            "generation": gym.spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32)
-        })
+        # Update observation space based on config
+        obs_config = config['observation_config']['remaining_proportion']
+        self.observation_space = gym.spaces.Box(
+            low=obs_config['low'],
+            high=obs_config['high'],
+            shape=(1,),
+            dtype=np.float32
+        )
         # logging
         self.action_values = []
         self.genetic_variance = []
@@ -47,9 +51,9 @@ class SelectionIntensityEnvironment(gym.Env):
         self.config =config
         
     def _get_obs(self):
-        population = self.population.haplotypes.cpu().numpy().astype(np.int32)
-        generation = np.array([self.current_generation / self.SP.max_generations], dtype=np.float32)
-        return {"population": population, "generation": generation}
+        remaining_proportion = 1 - (self.current_generation / self.max_generations)
+        return np.array([remaining_proportion], dtype=np.float32)
+
 
     def _get_info(self):
         return {
