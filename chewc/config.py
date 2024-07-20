@@ -22,16 +22,6 @@ def set_seed(seed):
     
 def get_default_config():
     config = {
-        
-        
-        'observation_config': {
-            'remaining_proportion': {'type': 'scalar', 'low': 0, 'high': 1},
-            'genetic_variance': {'type': 'scalar', 'low': 0, 'high': float('inf')},
-            'mean_phenotype': {'type': 'scalar', 'low': float('-inf'), 'high': float('inf')},
-            'max_breeding_value': {'type': 'scalar', 'low': float('-inf'), 'high': float('inf')},
-        },
-    
-
         # Environment parameters
         'action_low': 0.05,
         'action_high': 0.95,
@@ -65,7 +55,6 @@ def get_default_config():
         # Seed
         'seed': None
     }
-        
     return config
 
 
@@ -94,7 +83,8 @@ def create_simulation(config=None):
     T = Trait(G, founder_pop, target_mean=config['target_mean'], target_variance=config['target_variance'], seed=seed)
     
     SP = SimParams(founder_pop, config)
-    env = SelectionIntensityEnvironment(SP, config)
+    env_config = {'sparse_reward': config['sparse_reward']}
+    env = SelectionIntensityEnvironment(SP, env_config)
     
     return env
 

@@ -58,7 +58,7 @@ class ActionTrackingCallback(BaseCallback):
 
     def _log_action_data(self):
         action_data = {}
-        for gen in range(self.max_generations):
+        for gen in range(self.max_generations+1):
             if gen in self.action_history:
                 avg_action = np.mean(self.action_history[gen])
                 action_data[f"generation_{gen}"] = avg_action
