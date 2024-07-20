@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['collect_baselines', 'plot_best_run']
 
-# %% ../nbs/05_utils.ipynb 2
+# %% ../nbs/05_utils.ipynb 1
 import numpy as np
 import matplotlib.pyplot as plt
 def collect_baselines(env, actions, repetitions=10, cycles=5):

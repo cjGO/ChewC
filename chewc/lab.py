@@ -77,6 +77,10 @@ class SelectionIntensityEnvironment(gym.Env):
             "genetic_variance": self.population.breeding_values.var().cpu().item(),
             "current_generation": self.current_generation
         }
+    
+    def update_max_generations(self, new_max_gen):
+        self.SP.update_max_generations(new_max_gen)
+        self.max_generations = self.SP.max_generations
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -84,6 +88,7 @@ class SelectionIntensityEnvironment(gym.Env):
         self.phenotype = phenotype(self.population, self.SP.T, self.SP.h2)
         self.current_generation = 0
         self.episode_reward = 0
+        self.max_generations = self.SP.max_generations
         observation = self._get_obs()
         info = self._get_info()
         

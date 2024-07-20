@@ -31,6 +31,11 @@ def get_default_config():
             'max_breeding_value': {'type': 'scalar', 'low': float('-inf'), 'high': float('inf')},
         },
         
+        # Curriculum parameters
+        'start_gen': 2,
+        'end_gen': 10,
+        'curriculum_steps': 100000,
+        
         # Environment parameters
         'action_low': 0.01,
         'action_high': 0.99,
@@ -41,7 +46,7 @@ def get_default_config():
         'n_chr': 1,
         'n_loci': 100,
         'pop_size': 200,
-        'max_generations': 10,
+#         'max_generations': 10,
         'h2': 0.5,
         'target_mean': 0,
         'target_variance': 1,
@@ -56,8 +61,6 @@ def get_default_config():
         'log_freq': 100,
 
         # Progressive parameters
-        'start_gen': 10,
-        'end_gen': 100,
         'start_gae_lambda': 0.9,
         'end_gae_lambda': 0.95,
 

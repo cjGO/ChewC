@@ -70,11 +70,15 @@ class SimParams:
         self.h2 = config['h2']
         self.reps = config['reps']
         self.pop_size = config['pop_size']
-        self.max_generations = config['max_generations']
+        self.max_generations = config['start_gen']  # Initialize with start_gen
+        self.end_gen = config['end_gen']  # Store end_gen for reference
         self.founder_pop = founder_pop
         self.seed = config['seed']
         if self.seed is not None:
             set_seed(self.seed)
+
+    def update_max_generations(self, new_max_gen):
+        self.max_generations = min(new_max_gen, self.end_gen)
 
 def scale_values(x, from_range=(-1, 1), to_range=(0.05, 0.95)):
     # Ensure input is a PyTorch tensor
