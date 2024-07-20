@@ -72,3 +72,6 @@ def plot_best_run(results, best_action):
     plt.tight_layout()
     plt.show()
 
+    for c,i in enumerate(mean_phenotypes):
+        print(c,i)
+

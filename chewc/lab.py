@@ -75,7 +75,8 @@ class SelectionIntensityEnvironment(gym.Env):
         return {
             "max_phenotype": self.population.breeding_values.max().cpu().item(),
             "genetic_variance": self.population.breeding_values.var().cpu().item(),
-            "current_generation": self.current_generation
+            "current_generation": self.current_generation,
+            "max_generation":self.max_generations,
         }
     
     def update_max_generations(self, new_max_gen):
@@ -110,7 +111,7 @@ class SelectionIntensityEnvironment(gym.Env):
         info = self._get_info()
         info['normalized_action'] = action
         
-        terminated = self.current_generation > self.SP.max_generations
+        terminated = self.current_generation >= self.SP.max_generations
         #REWARD
         if self.config.get('sparse_reward', False):  # Use .get() with a default value
             reward = 0 if not terminated else float(self.population.breeding_values.max())
