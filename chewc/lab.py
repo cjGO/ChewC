@@ -10,7 +10,6 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 import numpy as np
 from .sim import *
 import torch
-
 class SelectionIntensityEnvironment(gym.Env):
     def __init__(self, SP, config):
         super(SelectionIntensityEnvironment, self).__init__()
@@ -20,21 +19,32 @@ class SelectionIntensityEnvironment(gym.Env):
         self.max_generations = SP.max_generations
         # Get action space bounds from config, with defaults if not provided
         
-        self.action_low = config.get('action_low', 0.05)
-        self.action_high = config.get('action_high', 0.95)
+        self.action_low = config.get('action_low', 0.01)
+        self.action_high = config.get('action_high', 0.99)
         
-        # Update action space with custom bounds
         self.action_space = gym.spaces.Box(
-            low=np.array([-1]), 
-            high=np.array([1]), 
+            low=np.array([self.action_low]), 
+            high=np.array([self.action_high]), 
             dtype=np.float32
         )
         
-        self.observation_space = gym.spaces.Dict({
-            "population": gym.spaces.Box(low=0, high=1, shape=(self.SP.pop_size, 2, self.SP.G.n_chr, self.SP.G.n_loci), dtype=np.int32),
-            "generation": gym.spaces.Box(low=0, high=1, shape=(1,), dtype=np.float32)
-        })
-        # logging
+        # Update observation space based on config
+#         obs_config = config['observation_config']['remaining_proportion']
+        self.observation_config = config['observation_config']
+        # Dynamically create observation space
+        obs_low = []
+        obs_high = []
+        self.obs_keys = []
+        for key, value in self.observation_config.items():
+            self.obs_keys.append(key)
+            obs_low.append(value['low'])
+            obs_high.append(value['high'])
+        
+        self.observation_space = gym.spaces.Box(
+            low=np.array(obs_low, dtype=np.float32),
+            high=np.array(obs_high, dtype=np.float32)
+        )
+
         self.action_values = []
         self.genetic_variance = []
         self.max_breeding_values = []
@@ -47,9 +57,19 @@ class SelectionIntensityEnvironment(gym.Env):
         self.config =config
         
     def _get_obs(self):
-        population = self.population.haplotypes.cpu().numpy().astype(np.int32)
-        generation = np.array([self.current_generation / self.SP.max_generations], dtype=np.float32)
-        return {"population": population, "generation": generation}
+        obs = []
+        for key in self.obs_keys:
+            if key == 'remaining_proportion':
+                obs.append(1 - (self.current_generation / self.max_generations))
+            elif key == 'genetic_variance':
+                obs.append(self.population.breeding_values.var().cpu().item())
+            elif key == 'mean_phenotype':
+                obs.append(self.population.phenotypes.mean().cpu().item())
+            elif key == 'max_breeding_value':
+                obs.append(self.population.breeding_values.max().cpu().item())
+            # Add more elif statements for other possible inputs
+        return np.array(obs, dtype=np.float32)
+
 
     def _get_info(self):
         return {
@@ -72,8 +92,9 @@ class SelectionIntensityEnvironment(gym.Env):
     def step(self, action):
         
         # Map the action from [-1, 1] to [action_low, action_high]
-        action = scale_values(action, to_range=(self.action_low, self.action_high))
-
+#         print('raw', action)
+#         action = scale_values(action, to_range=(self.action_low, self.action_high))
+#         print('usu', action)
         total_selected = max((2,int(action * self.population.size)))
         selected = torch.topk(self.population.phenotypes, total_selected).indices
         self.population = create_pop(self.SP.G, random_crosses(self.population.haplotypes[selected], self.SP.pop_size))
@@ -100,5 +121,3 @@ class SelectionIntensityEnvironment(gym.Env):
             }
 
         return observation, reward, bool(terminated), False, info
-
-
